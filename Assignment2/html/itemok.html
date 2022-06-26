@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+            let checkerrr;
+            $('#iid').blur(() => {
+                console.log('blur triggered')
+                let pathawaychadata =
+                    {iid:$('#iid').val(),iname:$('#iname').val(),iprice:$('#iprice').val(),op: 1}
+                let senddata = {
+                    data: pathawaychadata,
+                    type: 'get',
+                    datatype: 'json',
+                    url: 'http://localhost:800/itemdata',
+                    success: (miladata) => {
+                        if (miladata) {
+                            console.log('kuch toh bat hai');
+                            if (miladata.status) {
+                                console.log('mil gaya data');
+                                $('#iname').val(miladata.result.itemname);
+                                $('#iprice').val(miladata.result.itemcost);
+                                checkerrr=1
+                            } else {
+                                console.log('kuch nahi mila');
+                                checkerrr=0;
+                                $('#iname').val('');
+                                $('#iprice').val('');
+                            }
+                        }
+                    },
+                    error: (errordata) => {
+                        console.log('kat gaya' + errordata)
+                    }
+                }
+                $.ajax(senddata);
+            })
+            document.addEventListener('click',()=>{
+                console.log(checkerrr)
+                if(checkerrr){
+                    //document.querySelector('#update').disabled=false;
+                    document.querySelector('#add').disabled=true
+                }else{
+                    //document.querySelector('#update').disabled=true;
+                    document.querySelector('#add').disabled=false;
+                }
+            })
+            // $('#update').click(() => {
+            //     console.log('blur triggered')
+            //     let pathawaychadata =
+            //         {iid:$('#iid').val(),iname:$('#iname').val(),iprice:$('#iprice').val(),op: 2}
+            //     let senddata = {
+            //         data: pathawaychadata,
+            //         type: 'get',
+            //         datatype: 'json',
+            //         url: 'http://localhost:800/itemdata',
+            //         success: (miladata) => {
+            //             if (miladata) {
+            //                 console.log('kuch toh bat hai');
+            //                 if (miladata.status) {
+            //                     console.log('mil gaya data');
+            //                     $('#iname').val(miladata.result.itemname);
+            //                     $('#iprice').val(miladata.result.itemcost);
+            //                 } else {
+            //                     console.log('kuch nahi mila');
+            //                 }
+            //             }
+            //         },
+            //         error: (errordata) => {
+            //             console.log('kat gaya' + errordata)
+            //         }
+            //     }
+            //     $.ajax(senddata);
+            // })
+            $('#add').click(() => {
+                console.log('blur triggered')
+                let pathawaychadata =
+                    {iid:$('#iid').val(),iname:$('#iname').val(),iprice:$('#iprice').val(),op: 2}
+                let senddata = {
+                    data: pathawaychadata,
+                    type: 'get',
+                    datatype: 'json',
+                    url: 'http://localhost:800/itemdata',
+                    success: (miladata) => {
+                        if (miladata) {
+                            console.log('kuch toh bat hai');
+                            console.log(miladata.status);
+                            if (miladata.status) {
+                                console.log('mil gaya data');
+                                $('#iname').val(miladata.result.itemname);
+                                $('#iprice').val(miladata.result.itemcost);
+                            } else {
+                                console.log('kuch nahi mila');
+                            }
+                        }
+                    },
+                    error: (errordata) => {
+                        console.log('kat gaya' + errordata)
+                    }
+                }
+                $.ajax(senddata);
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <input type="text" id="iid" placeholder="id"><span id="status"></span><br>
+    <input type="text" id="iname" placeholder="item name"><br>
+    <input type="text" id="iprice" placeholder="item cost"><br>
+    <button id="add" disabled>add</button>
+    <button id="update" disabled>update</button>
+</body>
+
+</html>

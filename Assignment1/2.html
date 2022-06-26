@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+
+<body>
+    <input type="text" placeholder="empno" id="empno"><span id="msg">Message</span>
+    <br><br>
+    <input type="text" placeholder="employee name" id="empname">
+    <br><br>
+    <input type="email" placeholder="email" id="email">
+    <br><br>
+    <input type="text" placeholder="deptid" id="deptid">
+    <br><br>
+    <button id="add" disabled>Add</button>
+    <button id="edit" disabled>Modify</button>
+    <button id="remove" disabled>remove</button>
+    <button id="viewall" disabled>View all</button>
+    <button id="did" disabled>view on dept id</button>
+    <hr>
+    <p id="y">Y region</p>
+    <script>
+
+        const employee = [{ empno: 2, empname: 'Saurabh', email: `sauryaa@gmail.com`, deptid: 101 }];
+
+
+        window.addEventListener('DOMContentLoaded', () => {
+
+            const empno = document.querySelector("#empno");
+            empno.addEventListener('blur', () => {
+
+
+                console.log("blur event");
+
+
+                let empno = document.querySelector("#empno").value;
+                console.log("input is " + empno);
+
+                let output = getEmployeeDetails(empno);
+
+                if (output.result) {
+                    console.log(output.result);
+                    document.querySelector("#empname").value = output.empdetails.empname;
+                    document.querySelector("#email").value = output.empdetails.email;
+                    document.querySelector("#deptid").value = output.empdetails.deptid;
+
+                    document.querySelector("#edit").disabled = false;
+                    document.querySelector("#remove").disabled = false;
+                    document.querySelector("#msg").innerText = "employee found";
+                }
+                else {
+                    document.querySelector("#empname").value = "";
+                    document.querySelector("#email").value = "";
+                    document.querySelector("#deptid").value = "";
+
+                    document.querySelector("#edit").disabled = true;
+                    document.querySelector("#add").disabled = false;
+                    document.querySelector("#remove").disabled = true;
+                    document.querySelector("#msg").innerText = "employee not found";
+                }
+
+            });//blur event
+
+            const add = document.querySelector("#add");
+            add.addEventListener('click', () => {
+
+                console.log("add bn click");
+
+                let input = {
+                    empno: document.querySelector("#empno").value, empname: document.querySelector("#empname").value,
+                    email: document.querySelector("#email").value,
+                    deptid: document.querySelector("#deptid").value
+
+                };
+
+
+                let output = addEmployee(input);
+                let messege = document.querySelector("#msg");
+                if (output) {
+                    messege.innerText = "employee added";
+                    document.querySelector('#did').disabled = false;
+                }
+                else {
+                    messege.innerText = "employee not added";
+
+                }
+
+                document.querySelector("#add").disabled = true;
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#edit").disabled = false;
+                
+
+                // showEmployees();
+
+                document.querySelector("#empname").value = "";
+                document.querySelector("#email").value = "";
+                document.querySelector("#deptid").value = "";
+
+
+            });//end of add event
+
+
+            const edit = document.querySelector("#edit");
+            edit.addEventListener('click', () => {
+
+                console.log("edit btn click");
+
+                let updateObject = {
+                    empno: document.querySelector("#empno").value, empname: document.querySelector("#empname").value,
+                    email: document.querySelector("#email").value,
+                    deptid: document.querySelector("#deptid").value
+                };
+
+                let output = updateEmployee(updateObject);
+                let msg = document.querySelector("#msg");
+
+                if (output) {
+                    console.log(output);
+                    msg.innerText = "updated ";
+                }
+                else {
+                    console.log(output);
+                    msg.innerText = " not updated ";
+
+                }
+                document.querySelector("#viewall").disabled = false;
+                document.querySelector("#edit").disabled = true;
+
+
+                document.querySelector("#empname").value = "";
+                document.querySelector("#email").value = "";
+                document.querySelector("#deptid").value = "";
+
+
+            });//remove event
+
+            const remove = document.querySelector("#remove");
+            remove.addEventListener('click', () => {
+
+                console.log("remove btn click");
+
+                let empno = document.querySelector("#empno").value;
+
+                for (let i = 0; i < employee.length; i++) {
+                    if (employee[i].empno == empno) {
+                        employee.splice(i, 1);
+                        break;
+                    }
+                }
+                console.log("Employee removed successfully");
+                document.querySelector('#msg').innerText = "Employee removed successfully";
+                document.querySelector('#add').disabled = false;
+                document.querySelector('#edit').disabled = false;
+                document.querySelector('#remove').disabled = false;
+                document.querySelector('#viewall').disabled = false;
+                document.querySelector('#did').disabled = false;
+                document.querySelector('#empname').value = "";
+                document.querySelector('#email').value = "";
+                document.querySelector('#deptid').value = "";
+
+            });//remove event
+
+            const view = document.querySelector("#viewall");
+            view.addEventListener('click', () => {
+
+                console.log("view btn click");
+
+                showEmployees();
+               // document.querySelector('#viewdid').disabled = false;
+
+            });//view all event
+
+            const dept = document.querySelector("#did");
+            dept.addEventListener('click', () => {
+
+                console.log("dept id btn click");
+                let deptid  = document.querySelector("#deptid").value;
+                let msg = document.querySelector("#msg");
+                if(deptid == ""){
+                    msg.innerText = "please enter deptid";
+                }
+                else
+                {
+                    msg.innerHTML = "Your deptid is " + deptid +"are printed";
+                    let showid = document.querySelector("#y").innerText = displayEmpid(deptid);
+                }
+            });//dept id event
+
+
+            function displayEmpid(id){
+                let output = false;
+                let show ="";
+                for(let i= 0 ; i<employee.length ; i++){
+                    if(employee[i].deptid == id){
+                        show +=  employee[i].empno +"-- " + employee[i].empname + "--" + employee[i].email + "--"+employee[i].deptid + "   ";
+
+                        document.querySelector("#y").innerHTML= show;
+                        output = true;
+
+                    }
+                }
+                
+                return show;
+            }
+
+            function getEmployeeDetails(empno) {
+                let output = { result: false, empdetails: { empno: 0, empname: '', email: '', deptid: 0 } };
+                for (let i = 0; i < employee.length; i++) {
+                    if (employee[i].empno == empno) {
+                        output.result = true;
+                        output.empdetails = employee[i];
+                        break;
+                    }
+
+                }
+                return output;
+                console.log(output);
+            }
+            function addEmployee(input) {
+                let added = false;
+                employee.push(input);
+                added = true;
+                return added;
+            }
+
+            function updateEmployee(updateObject) {
+                let output = false;
+                let oempno = window.prompt("enter empno");
+                let oempname = window.prompt("enter empname");
+                let oemail = window.prompt("eneter email");
+                let odeptid = window.prompt("enter id");
+                let emptemp = { empno: oempno, empname: oempname, email: oemail, deptid: odeptid };
+                for (let i = 0; i < employee.length; i++) {
+                    if (employee[i].empno == oempno) {
+                        employee.splice(i, 1, emptemp);
+                        output = true;
+                    }
+                }
+return output;
+
+            }
+
+            function showEmployees() {
+                console.log("show all employee");
+                let output = employee;//employee object is added to output
+
+
+                let msg = "";//empty string 
+                for (let i = 0; i < output.length; i++) {
+                    msg += "<br>" + output[i].empno + " " + output[i].empname + " " + output[i].email + " " + output[i].deptid;
+
+                    document.querySelector("#y").innerHTML = msg;
+                }
+
+            }
+        });
+
+    </script>
+</body>
+
+</html>
