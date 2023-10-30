@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    span {
+        color: red;
+    }
+</style>
+
+<body>
+    <h1 style="text-align: center;">Student registration Form</h1>
+    <form>
+        <table>
+            <tr>
+                <td>
+                    <label for="_name">Name</label>
+                </td>
+                <td>
+                    <Input type="text" name="_name" required />
+                </td>
+            </tr>
+            <td>
+                <label for="address">Address</label>
+            </td>
+            <td>
+                <textarea id="address" name="address" required></textarea>
+            </td>
+            <tr>
+                <td><label for="_qualification">Last Qualification</label></td>
+                <td>
+                    <select name="Qualification" id="qualification">
+                        <option value="none" selected hidden></option>
+                        <option value="SSC">SSC</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BSC">BSC</option>
+                        <option value="MCOM">MCOM</option>
+                        <option value="BA">BA</option>
+                        <option value="MCA">MCA</option>
+                        <option value="BE">BE</option>
+                    </select><span id="qualificationErr"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td>
+                    <input type="radio" name="Gender" value="Male" />Male<input type="radio" name="Gender"
+                        value="Female" />Female<span id="genderErr"></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Captcha</td>
+                <td id="randomCaptcha"></td>
+            </tr>
+            <tr>
+                <td>Answer</td>
+                <td><Input type="number" id="captchaAnswer" required /><span id="captchaErr"></span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <button onclick="checkValids()">Save</button>
+                    <button type="reset">Cancel</button>
+                </td>
+            </tr>
+        </table>
+
+</body>
+<script>
+    let captchaAnswer;
+    const randomCaptchaObj = document.getElementById("randomCaptcha");
+    const qualificationObj = document.getElementById("qualification");
+    const allRadioBtns = document.getElementsByName("Gender");
+    const captchaAnswerObj = document.getElementById("captchaAnswer");
+
+    const qualificationErrObj = document.getElementById("qualificationErr");
+    const genderErrObj = document.getElementById("genderErr");
+    const captchaErrObj = document.getElementById("captchaErr");
+
+    window.addEventListener("DOMContentLoaded", () => {
+        let randomNo1 = Math.floor(Math.random() * 10);
+        let randomNo2 = Math.floor(Math.random() * 10);
+        randomCaptchaObj.innerHTML = randomNo1 + "+" + randomNo2;
+        captchaAnswer = randomNo1 + randomNo2;
+    });
+    function checkValids() {
+        if (qualificationObj.value === "none") {
+            qualificationErrObj.innerHTML = "Please select Last Qualification.";
+        }
+        else {
+            qualificationErrObj.innerHTML = "";
+        }
+        let isGenderSelected = false;
+        for (let i = 0; i < allRadioBtns.length; i++) {
+            if (allRadioBtns[i].checked) {
+                isGenderSelected = true;
+            }
+        }
+        if (!isGenderSelected) {
+            genderErrObj.innerHTML = "Please select gender.";
+        }
+        else {
+            genderErrObj.innerHTML = "";
+        }
+
+        if (Number.parseInt(captchaAnswerObj.value) !== captchaAnswer) {
+            captchaErrObj.innerHTML = "Captcha is Invalid";
+        }
+        else {
+            captchaErrObj.innerHTML = "";
+        }
+    }
+</script>
+
+</html>

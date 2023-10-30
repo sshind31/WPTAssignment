@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit="return validateForm()">
+        <table>
+            <tr>
+                <td><label for="name">Name:</label></td>
+                <td><input type="text" id="name" name="name" required></td>
+            </tr>
+            <tr>
+                <td><label for="address">Address:</label></td>
+                <td><textarea id="address" name="address" required></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="qualification">Last Qualification:</label></td>
+                <td>
+                    <select id="qualification" name="qualification" required>
+                        <option value="" selected hidden></option>
+                        <option value="SSC">SSC</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BSC">BSC</option>
+                        <option value="MCOM">MCOM</option>
+                        <option value="BA">BA</option>
+                        <option value="MCA">MCA</option>
+                        <option value="BE">BE</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Gender:</label></td>
+                <td>
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="captcha">Captcha</label></td>
+                <td>
+                    <span id="num1"></span> + <span id="num2"></span>
+
+                </td>
+            </tr>
+            <tr>
+                <td><label for="captcha">Answer</label></td>
+                <td>
+                    <input type="number" id="captcha" name="captcha" required>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Save">
+                    <input type="reset" value="Cancel">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+<script>
+    document.getElementById('num1').innerHTML = Math.floor(Math.random() * 10);
+    document.getElementById('num2').innerHTML = Math.floor(Math.random() * 10);
+    function validateForm() {
+        var name = document.getElementById('name').value;
+        var address = document.getElementById('address').value;
+        var qualification = document.getElementById('qualification').value;
+        var gender = document.querySelector('input[name="gender"]:checked');
+        var captchaInput = parseInt(document.getElementById('captcha').value);
+        var captchaSum = parseInt(document.getElementById('num1').innerHTML) + parseInt(document.getElementById('num2').innerHTML);
+
+        // Check if any input is empty
+        if (name === '' || address === '' || qualification === '' || !gender || isNaN(captchaInput) || captchaInput !== captchaSum) {
+            alert("Please fill in all the fields correctly.");
+            return false;
+        }
+    }
+</script>
+</html>
